@@ -1690,7 +1690,13 @@ static bool whisper_model_load(struct whisper_model_loader * loader, whisper_con
         {
             model.d_pe   = ggml_new_tensor_2d(ctx, GGML_TYPE_F32, n_text_state, n_text_ctx);
 
-            model.d_te   = ggml_new_tensor_2d(ctx, wtype,         n_text_state, n_vocab);
+            if (wtype==GGML_TYPE_Q4_0_4_4){
+                model.d_te   = ggml_new_tensor_2d(ctx,  GGML_TYPE_F16,         n_text_state, n_vocab);
+            }
+            else{
+                model.d_te   = ggml_new_tensor_2d(ctx,  wtype,         n_text_state, n_vocab);
+            }
+
 
             model.d_ln_w = ggml_new_tensor_1d(ctx, GGML_TYPE_F32, n_text_state);
             model.d_ln_b = ggml_new_tensor_1d(ctx, GGML_TYPE_F32, n_text_state);
